@@ -1,5 +1,6 @@
 export SLOTS=/sys/devices/platform/bone_capemgr/slots
 grep -q am33xx_pwm $SLOTS || echo am33xx_pwm > $SLOTS
+# PWM0 -> P9.31
 echo 0 > /sys/class/pwm/pwmchip0/export
 echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable
 echo 1000000 > /sys/class/pwm/pwmchip0/pwm0/period
