@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string>
 #include <fcntl.h>
 #include <unistd.h>
 #include <poll.h>
@@ -18,7 +18,7 @@ const unsigned int PinNumbers[] = {
 
 // files
 const std::string GPIO_PATH = "/sys/class/gpio/";	// path to gpio device files
-const unsigned int MIN_BUTTON_TIME = 100000;		// debounce delay (in µs)
+const unsigned int DEBOUNCING_TIME = 10000;		// debounce delay (in µs)
 
 
 Gpio::Gpio(BB_PIN Pin, DIRECTION Dir) : m_Pin(Pin), m_Dir(Dir) {
@@ -134,8 +134,10 @@ bool Gpio::toggle() {
 }
 bool Gpio::waitChange(Gpio::CHANGE Change, int TimeOut) {
 	
+	setInterrupt(Change);
+	
 	// open gpio value file
-	int fd = open(getValueFileName.c_str(), O_RDONLY);
+	int fd = open(getValueFileName().c_str(), O_RDONLY);
 	if (fd < 0) {
 		std::cout << "Error: failed to open GPIO value file" << std::endl;
 		return false;
@@ -157,14 +159,14 @@ bool Gpio::waitChange(Gpio::CHANGE Change, int TimeOut) {
 	}
 		
 	// wait on gpio change
-	ret = poll(&fds, nfds, timeout);
+	ret = poll(&fds, nfds, TimeOut);
 	if (ret < 0) {
 	  std::cout << "Error: GPIO poll failed" << std::endl;
 	  return false;
 	}
 	
 	// wait for signal to settle
-	usleep(MIN_BUTTON_TIME);
+	usleep(DEBOUNCING_TIME);
 	
 	// read value
 	lseek(fds.fd, 0, SEEK_SET);
@@ -296,6 +298,6 @@ std::string Gpio::getUnexportFileName() {
 std::string Gpio::getDirectionFileName() {
 	return GPIO_PATH + "gpio" + std::to_string(pinNumber()) + "/direction";
 }
-std::string getEdgeFileName() {
+std::string Gpio::getEdgeFileName() {
 	return GPIO_PATH + "gpio" + std::to_string(pinNumber()) + "/edge";
 }
