@@ -2,11 +2,13 @@
 #include "light.h"
 #include "uart.h"
 #include "trigger.h"
+#include "i2c.h"
 
 // interrupt flags
 uint8_t GpioInt = 0;
 uint8_t UartInt = 0;
-
+uint8_t I2cRxInt = 0;
+uint8_t I2cTxInt = 0;
 int main(void)
 {
     WDT_A_hold(WDT_A_BASE);    // stop watchdog timer
@@ -17,6 +19,7 @@ int main(void)
     TRIGGER_init();
     UART_init();
     UART_enableRx();
+    I2C_init();
 
     // wait on interrupt
     __bis_SR_register(GIE);
@@ -61,6 +64,30 @@ int main(void)
             uint8_t RxData = EUSCI_A_UART_receiveData(EUSCI_A1_BASE);
             LIGHT_setState((LIGHT_STATE) RxData);
         }
+
+        /**
+         * I2C interrupt handling
+         */
+        if (I2cRxInt > 0)
+        {
+
+            // receive data
+            uint8_t RxData = I2C_rx();
+
+            // decrement interrupt flag
+            I2cRxInt--;
+
+        }
+        if (I2cTxInt > 0)
+        {
+
+            // transmit data
+            EUSCI_B_I2C_slavePutData(EUSCI_B1_BASE, 5);
+
+            // decrement interrupt flag
+            I2cTxInt--;
+
+        }
     }
 }
 
@@ -102,6 +129,62 @@ __interrupt void USCI_A1_ISR(void)
     case USCI_UART_UCSTTIFG:
         break;
     case USCI_UART_UCTXCPTIFG:
+        break;
+    }
+}
+
+#pragma vector=USCI_B1_VECTOR
+__interrupt void USCIB1_ISR(void)
+{
+
+    switch (__even_in_range(UCB1IV, 0x1E))
+    {
+    case 0x00:
+        break;                       // Vector 0: No interrupts break;
+    case 0x02:
+        break;                       // Vector 2: ALIFG break;
+    case 0x04:
+        break;                       // Vector 4: NACKIFG break;
+    case 0x06:
+        break;                       // Vector 6: STTIFG break;
+    case 0x08:
+        // Vector 8: STPIFG
+        EUSCI_B_I2C_clearInterrupt(EUSCI_B1_BASE, EUSCI_B_I2C_STOP_INTERRUPT);
+
+        break;                       // Vector 8: STPIFG break;
+    case 0x0a:
+        break;                       // Vector 10: RXIFG3 break;
+    case 0x0c:
+        break;                       // Vector 14: TXIFG3 break;
+    case 0x0e:
+        break;                       // Vector 16: RXIFG2 break;
+    case 0x10:
+        break;                       // Vector 18: TXIFG2 break;
+    case 0x12:
+        break;                       // Vector 20: RXIFG1 break;
+    case 0x14:
+        break;                       // Vector 22: TXIFG1 break;
+    case 0x16:
+    {
+        I2cRxInt++;
+        EUSCI_B_I2C_clearInterrupt(EUSCI_B1_BASE, EUSCI_B_I2C_RECEIVE_INTERRUPT0);
+
+        break;                      // Vector 24: RXIFG0 break;
+    }
+    case 0x18:
+    {
+        I2cTxInt++;
+        EUSCI_B_I2C_clearInterrupt(EUSCI_B1_BASE, EUSCI_B_I2C_TRANSMIT_INTERRUPT0);
+
+        break;                        // Vector 26: TXIFG0 break;
+    }
+    case 0x1a:
+        break;                       // Vector 28: BCNTIFG break;
+    case 0x1c:
+        break;                       // Vector 30: clock low timeout break;
+    case 0x1e:
+        break;                       // Vector 32: 9th bit break;
+    default:
         break;
     }
 }
