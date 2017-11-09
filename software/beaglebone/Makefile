@@ -37,6 +37,7 @@ CXX = $(TOOLCHAIN_PREFIX)g++
 MAKEDIR = mkdir -p
 COPY = cp -f
 REMOVE = rm -f
+TOUCH = touch
 
 
 #####  COMPILER OPTIONS  #####
@@ -122,6 +123,9 @@ $(BIN_DIR):
 clean:
 	$(REMOVE) $(OBJ_DIR)/*.o $(DEP_DIR)/*.d
 
+clear:
+	$(TOUCH) *
+	$(REMOVE) $(OBJ_DIR)/*.o $(DEP_DIR)/*.d $(BIN_DIR)/*
 
 #####  INCLUDE DEPENDENCIES  #####
 -include $(wildcard  $(DEP_DIR)/*.d)
