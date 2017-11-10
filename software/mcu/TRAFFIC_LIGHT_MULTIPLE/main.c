@@ -76,6 +76,8 @@ int main(void)
             // receive data
             uint8_t RxData = I2C_rx();
             LIGHT_setState((LIGHT_STATE) RxData);
+            uint8_t TxData = LIGHT_invert((LIGHT_STATE) RxData);
+            EUSCI_A_UART_transmitData(EUSCI_A1_BASE, TxData);
         }
         if (I2cTxInt > 0)
         {
