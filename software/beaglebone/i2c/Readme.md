@@ -1,0 +1,1 @@
+Add I2C-1 with: echo BB-I2C1 > /sys/devices/platform/bone_capemgr/slots
