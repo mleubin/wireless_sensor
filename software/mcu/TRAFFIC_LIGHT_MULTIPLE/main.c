@@ -70,23 +70,20 @@ int main(void)
          */
         if (I2cRxInt > 0)
         {
-
-            // receive data
-            uint8_t RxData = I2C_rx();
-
             // decrement interrupt flag
             I2cRxInt--;
 
+            // receive data
+            uint8_t RxData = I2C_rx();
+            LIGHT_setState((LIGHT_STATE) RxData);
         }
         if (I2cTxInt > 0)
         {
-
-            // transmit data
-            EUSCI_B_I2C_slavePutData(EUSCI_B1_BASE, 5);
-
             // decrement interrupt flag
             I2cTxInt--;
 
+            // transmit data
+            EUSCI_B_I2C_slavePutData(EUSCI_B1_BASE, (uint8_t) LIGHT_getState());
         }
     }
 }
