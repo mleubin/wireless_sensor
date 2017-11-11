@@ -1,10 +1,17 @@
+/*
+ * Gpio.cpp
+ *
+ *  Created on: 11.11.2017
+ *      Author: mleubin
+ */
+
 #include <iostream>
 #include <string>
 #include <fcntl.h>
 #include <unistd.h>
 #include <poll.h>
 
-#include "gpio.h"
+#include "Gpio.h"
 
 // GPIO names
 const std::string PinNames[] = { "P8_3", "P8_4", "P8_5", "P8_6", "P8_7", "P8_8",

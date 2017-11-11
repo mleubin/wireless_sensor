@@ -1,3 +1,13 @@
+/*
+ * Gpio.h
+ *
+ *  Created on: 11.11.2017
+ *      Author: mleubin
+ */
+
+#ifndef GPIO_H_
+#define GPIO_H_
+
 #include <string>
 
 // BeagleBone GPIO pins
@@ -90,7 +100,7 @@ public:
 	// con-/destructor
 	Gpio(BB_PIN Pin, DIRECTION Dir);
 	Gpio(BB_PIN Pin, DIRECTION Dir, STATE State);
-	~Gpio();
+	virtual ~Gpio();
 
 	// pin utils
 	std::string pinName() const;
@@ -122,3 +132,5 @@ private:
 	std::string getDirectionFileName();
 	std::string getEdgeFileName();
 };
+
+#endif /* GPIO_H_ */
