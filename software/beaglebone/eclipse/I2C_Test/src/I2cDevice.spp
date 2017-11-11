@@ -1,3 +1,10 @@
+/*
+ * I2cDevice.cpp
+ *
+ *  Created on: 11.11.2017
+ *      Author: mleubin
+ */
+
 #include <iostream>
 #include <string>
 #include <fcntl.h>
@@ -6,7 +13,7 @@
 #include <sys/ioctl.h>
 #include <stdio.h>
 
-#include "i2c.h"
+#include "I2cDevice.h"
 
 const int INTERFACE_COUNT = 3;
 const std::string DEVICE_FILE_NAMES[INTERFACE_COUNT] = { "/dev/i2c-0",

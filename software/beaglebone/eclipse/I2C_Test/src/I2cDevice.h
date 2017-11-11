@@ -1,3 +1,13 @@
+/*
+ * I2cDevice.h
+ *
+ *  Created on: 11.11.2017
+ *      Author: mleubin
+ */
+
+#ifndef I2CDEVICE_H_
+#define I2CDEVICE_H_
+
 #include <stdint.h>
 #include <string>
 
@@ -32,3 +42,5 @@ private:
 	bool init();
 	std::string getDeviceFileName();
 };
+
+#endif /* I2CDEVICE_H_ */
