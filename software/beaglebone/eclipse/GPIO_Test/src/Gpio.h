@@ -76,7 +76,8 @@ typedef enum {
 	P9_28 = 61,
 	P9_29 = 62,
 	P9_30 = 63,
-	P9_31 = 64
+	P9_31 = 64,
+	P_UNDEF = 65
 } BB_PIN;
 
 class Gpio {
@@ -98,6 +99,7 @@ public:
 	// public functions
 public:
 	// con-/destructor
+	Gpio();
 	Gpio(BB_PIN Pin, DIRECTION Dir);
 	Gpio(BB_PIN Pin, DIRECTION Dir, STATE State);
 	virtual ~Gpio();

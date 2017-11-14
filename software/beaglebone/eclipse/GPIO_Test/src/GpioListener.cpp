@@ -11,6 +11,13 @@
 
 const int STOP_REFRESH_TIME_MS = 100;
 
+GpioListener::GpioListener() : m_Listener(){
+	m_Pin = P_UNDEF;
+	m_Change = Gpio::NONE;
+	m_Running = false;
+	m_onGpioChange = NULL;
+}
+
 GpioListener::GpioListener(BB_PIN Pin, Gpio::CHANGE Change, void (*onGpioChange)(Gpio&)) :
 		m_Pin(Pin), m_Change(Change), m_Listener(), m_Running(true), m_onGpioChange(onGpioChange) {
 }

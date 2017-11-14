@@ -15,6 +15,7 @@
 
 class GpioListener {
 public:
+	GpioListener();
 	GpioListener(BB_PIN Pin, Gpio::CHANGE Change, void (*onGpioChange)(Gpio&));
 	virtual ~GpioListener();
 

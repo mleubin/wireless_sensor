@@ -22,18 +22,24 @@ const std::string PinNames[] = { "P8_3", "P8_4", "P8_5", "P8_6", "P8_7", "P8_8",
 		"P8_41", "P8_42", "P8_43", "P8_44", "P8_45", "P8_46", "P9_11", "P9_12",
 		"P9_13", "P9_14", "P9_15", "P9_16", "P9_17", "P9_18", "P9_19", "P9_20",
 		"P9_21", "P9_22", "P9_23", "P9_24", "P9_25", "P9_26", "P9_27", "P9_28",
-		"P9_29", "P9_30", "P9_31" };
+		"P9_29", "P9_30", "P9_31", "P_UNDEF" };
 
 // GPIO linux device number
 const unsigned int PinNumbers[] =
 		{ 38, 39, 34, 35, 66, 67, 69, 68, 45, 44, 23, 26, 47, 46, 27, 65, 22,
 				63, 62, 37, 36, 33, 32, 61, 86, 88, 87, 89, 10, 11, 9, 81, 8,
 				80, 78, 79, 76, 77, 74, 75, 72, 73, 70, 71, 30, 60, 31, 50, 48,
-				51, 5, 4, 13, 12, 3, 2, 49, 15, 117, 14, 115, 113, 111, 112, 110 };
+				51, 5, 4, 13, 12, 3, 2, 49, 15, 117, 14, 115, 113, 111, 112, 110, 0 };
 
 // files
 const std::string GPIO_PATH = "/sys/class/gpio/";	// path to gpio device files
 const unsigned int DEBOUNCING_TIME = 10000;		// debounce delay (in µs)
+
+Gpio::Gpio() {
+	m_Pin = P_UNDEF;
+	m_Dir = IN;
+	m_State = UNKNOWN;
+}
 
 Gpio::Gpio(BB_PIN Pin, DIRECTION Dir) :
 		m_Pin(Pin), m_Dir(Dir) {
