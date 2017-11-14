@@ -22,8 +22,8 @@ public:
 	// public functions
 public:
 	// con-/destructor
-	I2cDevice(I2C_INTERFACE Interface, int Address);
 	I2cDevice(int Address);
+	I2cDevice(I2C_INTERFACE Interface, int Address);
 	~I2cDevice();
 
 	bool probe();
